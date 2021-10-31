@@ -27,9 +27,10 @@ type Device struct {
 	Timezone    string    `json:"timezone"`
 }
 
-type Results map[string]Device
+type Result map[string]Device
 
-var devices Results
+var result Result
+var devices []Device
 
 var ctx context.Context
 var err error
@@ -63,20 +64,20 @@ func init() {
 	if err != nil {
 		fmt.Println(err)
 	}
-	_ = json.Unmarshal([]byte(file), &devices)
+	_ = json.Unmarshal([]byte(file), &result)
+
+	devices = make([]Device, 0)
+	for _, item := range result {
+		devices = append(devices, item)
+	}
 
 }
 
 func ListDevicesHandler(c *gin.Context) {
-	listOfDevices := make([]Device, 0)
-
-	for _, item := range devices {
-		listOfDevices = append(listOfDevices, item)
-	}
 	pagination := PaginationRequest(c)
 	start, end := (pagination.Page-1)*pagination.Limit, pagination.Page*pagination.Limit
 
-	c.JSON(http.StatusOK, listOfDevices[start:end])
+	c.JSON(http.StatusOK, devices[start:end])
 }
 
 func GetDeviceByIDHandler(c *gin.Context) {
