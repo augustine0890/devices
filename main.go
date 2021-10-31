@@ -1,3 +1,18 @@
+// Devices API
+//
+// This is a sample devices API.
+//
+//	Schemes: http
+//  Host: localhost:8080
+//	BasePath: /
+//	Version: 1.0.0
+//
+//	Consumes:
+//	- application/json
+//
+//	Produces:
+//	- application/json
+// swagger:meta
 package main
 
 import (
@@ -76,6 +91,14 @@ func init() {
 	log.Println("Fetched devices: ", len(devices))
 }
 
+// swagger:operation GET /devices devices listDevices
+// Returns list of devices
+// ---
+// produces:
+// - application/json
+// responses:
+//     '200':
+//         description: Successful operation
 func ListDevicesHandler(c *gin.Context) {
 	pagination := PaginationRequest(c)
 	start, end := (pagination.Page-1)*pagination.Limit, pagination.Page*pagination.Limit
@@ -83,6 +106,16 @@ func ListDevicesHandler(c *gin.Context) {
 	c.JSON(http.StatusOK, devices[start:end])
 }
 
+// swagger:operation POST /devices devices newDevice
+// Create a new device
+// ---
+// produces:
+// - application/json
+// responses:
+//     '200':
+//         description: Successful operation
+//     '400':
+//         description: Invalid input
 func NewDeviceHandler(c *gin.Context) {
 	var device Device
 	if err := c.ShouldBindJSON(&device); err != nil {
@@ -97,6 +130,22 @@ func NewDeviceHandler(c *gin.Context) {
 	c.JSON(http.StatusOK, device)
 }
 
+// swagger:operation GET /devices/{id} devices oneDevice
+// Get one device
+// ---
+// produces:
+// - application/json
+// parameters:
+//   - name: id
+//     in: path
+//     description: ID of the devices
+//     required: true
+//     type: string
+// responses:
+//     '200':
+//         description: Successful operation
+//     '404':
+//         description: Invalid devices ID
 func GetDeviceByIDHandler(c *gin.Context) {
 	id := c.Param("id")
 
@@ -112,6 +161,24 @@ func GetDeviceByIDHandler(c *gin.Context) {
 	})
 }
 
+// swagger:operation PUT /devices/{id} devices updateDevice
+// Update an existing device
+// ---
+// parameters:
+// - name: id
+//   in: path
+//   description: ID of the devices
+//   required: true
+//   type: string
+// produces:
+// - application/json
+// responses:
+//     '200':
+//         description: Successful operation
+//     '400':
+//         description: Invalid input
+//     '404':
+//         description: Invalid devices ID
 func UpdateDeviceHandler(c *gin.Context) {
 	id := c.Param("id")
 	var updateDevice Device
@@ -138,6 +205,20 @@ func UpdateDeviceHandler(c *gin.Context) {
 	c.JSON(http.StatusOK, updateDevice)
 }
 
+// swagger:operation GET /devices/type devices findDeviceByType
+// Search devices based on type
+// ---
+// produces:
+// - application/json
+// parameters:
+//   - name: type
+//     in: query
+//     description: device type
+//     required: true
+//     type: string
+// responses:
+//     '200':
+//         description: Successful operation
 func GetDeviceByTypeHandler(c *gin.Context) {
 	typeOf := c.Query("type")
 	listOfDevices := make([]Device, 0)
@@ -157,6 +238,20 @@ func GetDeviceByTypeHandler(c *gin.Context) {
 	c.JSON(http.StatusOK, listOfDevices[start:end])
 }
 
+// swagger:operation GET /devices/status devices findDeviceByStatus
+// Search devices based on status
+// ---
+// produces:
+// - application/json
+// parameters:
+//   - name: status
+//     in: query
+//     description: device status
+//     required: true
+//     type: string
+// responses:
+//     '200':
+//         description: Successful operation
 func GetDeviceByStatusHandler(c *gin.Context) {
 	status := c.Query("status")
 	listOfDevices := make([]Device, 0)

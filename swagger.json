@@ -1,0 +1,167 @@
+{
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "schemes": [
+    "http"
+  ],
+  "swagger": "2.0",
+  "info": {
+    "description": "This is a sample devices API.",
+    "title": "Devices API",
+    "version": "1.0.0"
+  },
+  "host": "localhost:8080",
+  "basePath": "/",
+  "paths": {
+    "/devices": {
+      "get": {
+        "description": "Returns list of devices",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "devices"
+        ],
+        "operationId": "listDevices",
+        "responses": {
+          "200": {
+            "description": "Successful operation"
+          }
+        }
+      },
+      "post": {
+        "description": "Create a new device",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "devices"
+        ],
+        "operationId": "newDevice",
+        "responses": {
+          "200": {
+            "description": "Successful operation"
+          },
+          "400": {
+            "description": "Invalid input"
+          }
+        }
+      }
+    },
+    "/devices/status": {
+      "get": {
+        "description": "Search devices based on status",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "devices"
+        ],
+        "operationId": "findDeviceByStatus",
+        "parameters": [
+          {
+            "type": "string",
+            "description": "device status",
+            "name": "status",
+            "in": "query",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation"
+          }
+        }
+      }
+    },
+    "/devices/type": {
+      "get": {
+        "description": "Search devices based on type",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "devices"
+        ],
+        "operationId": "findDeviceByType",
+        "parameters": [
+          {
+            "type": "string",
+            "description": "device type",
+            "name": "type",
+            "in": "query",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation"
+          }
+        }
+      }
+    },
+    "/devices/{id}": {
+      "get": {
+        "description": "Get one device",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "devices"
+        ],
+        "operationId": "oneDevice",
+        "parameters": [
+          {
+            "type": "string",
+            "description": "ID of the devices",
+            "name": "id",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation"
+          },
+          "404": {
+            "description": "Invalid devices ID"
+          }
+        }
+      },
+      "put": {
+        "description": "Update an existing device",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "devices"
+        ],
+        "operationId": "updateDevice",
+        "parameters": [
+          {
+            "type": "string",
+            "description": "ID of the devices",
+            "name": "id",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation"
+          },
+          "400": {
+            "description": "Invalid input"
+          },
+          "404": {
+            "description": "Invalid devices ID"
+          }
+        }
+      }
+    }
+  }
+}

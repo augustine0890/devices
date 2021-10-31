@@ -18,7 +18,16 @@
  - GET `/devices/{id}`: returns an existing device by ID
  - GET `/devices/type?type=X`: returns a list of devices by type
  - GET `/devices/status?status=X`: returns a list of devices by status
- 
+
+## Go Swagger
+- Installation: `brew tap go-swagger/go-swagger && brew install go-swagger` or (here)[https://goswagger.io/install.html]
+- Generate the specification in JSON format
+  - `swagger generate spec -o ./swagger.json`
+- Load the generated spec in the Swagger UI
+  - `swagger serve ./swagger.json` --> `http://localhost:53776/docs`
+- Set the flavor flag to swagger
+  - `swagger serve -F swagger ./swagger.json`
+
 ## Run the Server
 - Just run `go mod download` and then `go run main.go` to start the project.
 - The default port for listening is `8080`.
