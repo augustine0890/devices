@@ -16,8 +16,8 @@
  - GET `/devices`: returns a list of devices
  - POST `/devices`: creates a new devices
  - GET `/devices/{id}`: returns an existing device by ID
- - GET `/devices/type?type=X: returns a list of devices by type
- - GET `/devices/status?status=X: returns a list of devices by status
+ - GET `/devices/type?type=X`: returns a list of devices by type
+ - GET `/devices/status?status=X`: returns a list of devices by status
  
 ## Run the Server
 - Just run `go mod download` and then `go run main.go` to start the project.

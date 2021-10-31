@@ -68,8 +68,14 @@ func init() {
 }
 
 func ListDevicesHandler(c *gin.Context) {
+	listOfDevices := make([]Device, 0)
+
+	for _, item := range devices {
+		listOfDevices = append(listOfDevices, item)
+	}
+
 	// pagination := PaginationRequest(c)
-	c.JSON(http.StatusOK, devices)
+	c.JSON(http.StatusOK, listOfDevices)
 }
 
 func GetDeviceByIDHandler(c *gin.Context) {
