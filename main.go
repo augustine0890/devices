@@ -71,10 +71,8 @@ func GetDeviceByTypeHandler(c *gin.Context) {
 
 	for _, item := range devices {
 		found := false
-		for _, t := range item.Type {
-			if strings.EqualFold(t, typeOf) {
-				found = true
-			}
+		if strings.EqualFold(item.Type, typeOf) {
+			found = true
 		}
 		if found {
 			listOfRecipes = append(listOfRecipes, item)
@@ -90,10 +88,8 @@ func GetDeviceByStatusHandler(c *gin.Context) {
 
 	for _, item := range devices {
 		found := false
-		for _, s := range item.Status {
-			if strings.EqualFold(s, status) {
-				found = true
-			}
+		if strings.EqualFold(item.Status, status) {
+			found = true
 		}
 		if found {
 			listOfRecipes = append(listOfRecipes, item)
