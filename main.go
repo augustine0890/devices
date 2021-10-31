@@ -35,7 +35,7 @@ var ctx context.Context
 var err error
 
 func PaginationRequest(c *gin.Context) Pagination {
-	limit := 2
+	limit := 10
 	page := 1
 	query := c.Request.URL.Query()
 	for key, value := range query {
@@ -73,9 +73,10 @@ func ListDevicesHandler(c *gin.Context) {
 	for _, item := range devices {
 		listOfDevices = append(listOfDevices, item)
 	}
+	pagination := PaginationRequest(c)
+	start, end := (pagination.Page-1)*pagination.Limit, pagination.Page*pagination.Limit
 
-	// pagination := PaginationRequest(c)
-	c.JSON(http.StatusOK, listOfDevices)
+	c.JSON(http.StatusOK, listOfDevices[start:end])
 }
 
 func GetDeviceByIDHandler(c *gin.Context) {
@@ -106,8 +107,10 @@ func GetDeviceByTypeHandler(c *gin.Context) {
 			listOfDevices = append(listOfDevices, item)
 		}
 	}
+	pagination := PaginationRequest(c)
+	start, end := (pagination.Page-1)*pagination.Limit, pagination.Page*pagination.Limit
 
-	c.JSON(http.StatusOK, listOfDevices)
+	c.JSON(http.StatusOK, listOfDevices[start:end])
 }
 
 func GetDeviceByStatusHandler(c *gin.Context) {
@@ -123,8 +126,11 @@ func GetDeviceByStatusHandler(c *gin.Context) {
 			listOfDevices = append(listOfDevices, item)
 		}
 	}
+	pagination := PaginationRequest(c)
+	start, end := (pagination.Page-1)*pagination.Limit, pagination.Page*pagination.Limit
 
-	c.JSON(http.StatusOK, listOfDevices)
+	c.JSON(http.StatusOK, listOfDevices[start:end])
+
 }
 
 func main() {
