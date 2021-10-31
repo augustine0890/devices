@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"net/http"
+	"strconv"
 	"strings"
 
 	limits "github.com/gin-contrib/size"
@@ -13,9 +14,8 @@ import (
 )
 
 type Pagination struct {
-	Limit int    `json:"limit"`
-	Page  int    `json:"page"`
-	Sort  string `json:"sort"`
+	Limit int `json:"limit"`
+	Page  int `json:"page"`
 }
 
 // Define the data model
@@ -34,6 +34,27 @@ var devices Results
 var ctx context.Context
 var err error
 
+func PaginationRequest(c *gin.Context) Pagination {
+	limit := 2
+	page := 1
+	query := c.Request.URL.Query()
+	for key, value := range query {
+		queryValue := value[len(value)-1]
+		switch key {
+		case "limit":
+			limit, _ = strconv.Atoi(queryValue)
+			break
+		case "page":
+			page, _ = strconv.Atoi(queryValue)
+			break
+		}
+	}
+	return Pagination{
+		Limit: limit,
+		Page:  page,
+	}
+}
+
 // Initialization code
 func init() {
 	// devices = make([]Results, 0)
@@ -47,6 +68,7 @@ func init() {
 }
 
 func ListDevicesHandler(c *gin.Context) {
+	// pagination := PaginationRequest(c)
 	c.JSON(http.StatusOK, devices)
 }
 
@@ -67,7 +89,7 @@ func GetDeviceByIDHandler(c *gin.Context) {
 
 func GetDeviceByTypeHandler(c *gin.Context) {
 	typeOf := c.Query("type")
-	listOfRecipes := make([]Device, 0)
+	listOfDevices := make([]Device, 0)
 
 	for _, item := range devices {
 		found := false
@@ -75,16 +97,16 @@ func GetDeviceByTypeHandler(c *gin.Context) {
 			found = true
 		}
 		if found {
-			listOfRecipes = append(listOfRecipes, item)
+			listOfDevices = append(listOfDevices, item)
 		}
 	}
 
-	c.JSON(http.StatusOK, listOfRecipes)
+	c.JSON(http.StatusOK, listOfDevices)
 }
 
 func GetDeviceByStatusHandler(c *gin.Context) {
 	status := c.Query("status")
-	listOfRecipes := make([]Device, 0)
+	listOfDevices := make([]Device, 0)
 
 	for _, item := range devices {
 		found := false
@@ -92,11 +114,11 @@ func GetDeviceByStatusHandler(c *gin.Context) {
 			found = true
 		}
 		if found {
-			listOfRecipes = append(listOfRecipes, item)
+			listOfDevices = append(listOfDevices, item)
 		}
 	}
 
-	c.JSON(http.StatusOK, listOfRecipes)
+	c.JSON(http.StatusOK, listOfDevices)
 }
 
 func main() {

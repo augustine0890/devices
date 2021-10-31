@@ -22,6 +22,10 @@
 ## Run the Server
 - Just run `go mod download` and then `go run main.go` to start the project.
 - The default port for listening is `8080`.
+- Use a `cURL` command to issue an HTTP request or `Postman`:
+  - GET `/devices`: returns a list of devices
+    - `curl -X GET http://localhost:8080/devices`
+
 ## Dependencies
 - Install the dependencies used by the project
 - Gin Web Framework
