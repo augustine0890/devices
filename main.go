@@ -7,6 +7,7 @@ import (
 	"io/ioutil"
 	"net/http"
 
+	limits "github.com/gin-contrib/size"
 	"github.com/gin-gonic/gin"
 )
 
@@ -42,10 +43,31 @@ func ListDevicesHandler(c *gin.Context) {
 	c.JSON(http.StatusOK, devices)
 }
 
+func GetDeviceHandler(c *gin.Context) {
+	id := c.Param("id")
+
+	for _, item := range devices {
+		if item.ID == id {
+			c.JSON(http.StatusOK, item)
+			return
+		}
+	}
+
+	c.JSON(http.StatusNotFound, gin.H{
+		"error": "Device not found",
+	})
+}
+
 func main() {
 	router := gin.Default()
 
-	router.GET("/devices", ListDevicesHandler)
+	// Set the memory limit
+	router.Use(limits.RequestSizeLimiter(200))
 
+	// GET list devices
+	router.GET("/devices", ListDevicesHandler)
+	// GET device by id
+	router.GET("/devices/:id", GetDeviceHandler)
+	// The default listen port is 8080
 	router.Run()
 }
