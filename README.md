@@ -30,7 +30,8 @@
 - Install the dependencies used by the project
 - Gin Web Framework
   - `go get -u github.com/gin-gonic/gin`
-
+- Unique ID Generator
+  - `go get github.com/rs/xid`
 
 ## TODO
 - Reorganize the project structure by following:

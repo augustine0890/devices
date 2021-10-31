@@ -5,12 +5,14 @@ import (
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
+	"log"
 	"net/http"
 	"strconv"
 	"strings"
 
 	limits "github.com/gin-contrib/size"
 	"github.com/gin-gonic/gin"
+	"github.com/rs/xid"
 )
 
 type Pagination struct {
@@ -71,6 +73,7 @@ func init() {
 		devices = append(devices, item)
 	}
 
+	log.Println("Fetched devices: ", len(devices))
 }
 
 func ListDevicesHandler(c *gin.Context) {
@@ -78,6 +81,19 @@ func ListDevicesHandler(c *gin.Context) {
 	start, end := (pagination.Page-1)*pagination.Limit, pagination.Page*pagination.Limit
 
 	c.JSON(http.StatusOK, devices[start:end])
+}
+
+func NewDeviceHandler(c *gin.Context) {
+	var device Device
+	if err := c.ShouldBindJSON(&device); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error": err.Error(),
+		})
+		return
+	}
+	device.ID = xid.New().String()
+	devices = append(devices, device)
+	c.JSON(http.StatusOK, device)
 }
 
 func GetDeviceByIDHandler(c *gin.Context) {
@@ -140,6 +156,8 @@ func main() {
 	// Set the memory limit
 	router.Use(limits.RequestSizeLimiter(200))
 
+	// Create new devices
+	router.POST("/devices", NewDeviceHandler)
 	// GET list devices
 	router.GET("/devices", ListDevicesHandler)
 	// GET device by id
