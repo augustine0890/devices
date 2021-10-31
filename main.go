@@ -93,6 +93,7 @@ func NewDeviceHandler(c *gin.Context) {
 	}
 	device.ID = xid.New().String()
 	devices = append(devices, device)
+
 	c.JSON(http.StatusOK, device)
 }
 
@@ -109,6 +110,32 @@ func GetDeviceByIDHandler(c *gin.Context) {
 	c.JSON(http.StatusNotFound, gin.H{
 		"error": "Device not found",
 	})
+}
+
+func UpdateDeviceHandler(c *gin.Context) {
+	id := c.Param("id")
+	var updateDevice Device
+	if err := c.ShouldBindJSON(&updateDevice); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error": err.Error(),
+		})
+		return
+	}
+
+	for idx, item := range devices {
+		if item.ID == id {
+			updateDevice.ID = id
+			devices[idx] = updateDevice
+			break
+		} else {
+			c.JSON(http.StatusNotFound, gin.H{
+				"error": "Device not found",
+			})
+			return
+		}
+	}
+
+	c.JSON(http.StatusOK, updateDevice)
 }
 
 func GetDeviceByTypeHandler(c *gin.Context) {
@@ -162,6 +189,8 @@ func main() {
 	router.GET("/devices", ListDevicesHandler)
 	// GET device by id
 	router.GET("/devices/:id", GetDeviceByIDHandler)
+	// Update the device
+	router.PUT("/devices/:id", UpdateDeviceHandler)
 	// GET list of device by type
 	router.GET("/devices/type", GetDeviceByTypeHandler)
 	// GET list of device by status
